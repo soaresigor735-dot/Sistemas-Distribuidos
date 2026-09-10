@@ -1,0 +1,26 @@
+1 - Transferencia de um arquivo de trabalho.
+TCP ou UDP ? Por que? 
+R: Para a transferência de um arquivo de trabalho, o protocolo correto é o TCP.
+Confiabilidade e garantia de entrega: O TCP orienta-se à conexão e garante que 100% dos dados cheguem ao destino intactos. Se um pacote for perdido, corrompido ou chegar fora de ordem na rede, o TCP retransmite os dados automaticamente e os reordena antes de entregar ao sistema final.
+Integridade do arquivo: Documentos de trabalho (como arquivos PDF, planilhas, códigos-fonte ou relatórios) não toleram perda de dados. Se alguns bytes forem perdidos em um arquivo de texto ou executável, ele se tornará corrompido e inutilizável.
+
+2 - Sistema de videoconferencia.
+TCP ou UDP ? Por que? 
+R: Para um sistema de videoconferência, o protocolo principal utilizado é o UDP.
+Baixa latência (Velocidade): Em chamadas de áudio e vídeo ao vivo, o tempo de resposta precisa ser instantâneo para permitir a interação natural entre os participantes. O UDP não exige estabelecimento prévio de conexão (handshake) nem confirmação de recebimento para cada pacote transmitido, garantindo a menor latência possível.
+Tolerância a perdas pontuais: Se alguns pacotes de dados forem perdidos durante a transmissão, o resultado será apenas uma leve queda de resolução ou um pequeno travamento imperceptível no áudio/vídeo por uma fração de segundo. Isso é perfeitamente aceitável.
+Incompatibilidade com retransmissão: O TCP exige a retransmissão de todos os pacotes perdidos. Em uma videoconferência, esperar a retransmissão de um frame de vídeo perdido gera atraso e dessincronização; quando o pacote corrigido finalmente chegasse, aquela imagem já estaria desatualizada em relação ao fluxo ao vivo.
+
+3 - Sistema financeiro enviando uma operação critica.
+TCP ou UDP ? Por que?
+R: TCP.
+Zero tolerância a perdas (Confiabilidade): Em transações financeiras (como transferências bancárias, pagamentos ou ordens de compra e venda), perder ou alterar um único byte de informação pode alterar valores, duplicar operações ou corromper dados críticos. O TCP garante a entrega exata e completa de todos os pacotes.
+Garantia de ordem dos dados: As operações precisam ser processadas na sequência exata em que foram disparadas. O TCP atribui números de sequência aos pacotes e reorganiza tudo na ordem correta antes de entregar à aplicação.
+Confirmação de recebimento (Handshake e ACKs): O TCP utiliza mecanismos rígidos de confirmação de entrega. O sistema emissor só considera a mensagem enviada após receber o retorno (Acknowledgement) do receptor, garantindo a rastreabilidade da transação.
+
+4 - jogo on-line enviando continuamente a posição dos jogadores.
+TCP ou UDP ? Por que?
+R: o protocolo ideal é o UDP.
+Baixa latência e tempo real: O estado do jogo precisa ser atualizado dezenas de vezes por segundo (30 a 60 Hz). O UDP transmite os pacotes sem aguardar confirmações (ACKs) nem realizar handshakes, garantindo que as coordenadas cheguem ao servidor com o menor atraso (ping) possível.
+Dados efêmeros (descarte de pacotes velhos): A posição do jogador muda constantemente. Se a coordenada do quadro anterior for perdida no caminho, ela já é irrelevante no quadro seguinte, pois o servidor precisa apenas da posição mais recente.
+Incompatibilidade com o TCP (Head-of-Line Blocking): Se o TCP perdesse a coordenada de 200 ms atrás, ele pausaria o recebimento de todos os dados novos para retransmitir aquele pacote antigo perdido. Isso causaria congelamentos seguidos de "saltos" visuais (teleportes/lag spikes) na tela do jogador.
