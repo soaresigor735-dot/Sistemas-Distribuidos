@@ -1,0 +1,95 @@
+Passo a Passo do Código
+import socket
+
+Importa a biblioteca nativa do Python responsável por gerenciar conexões de rede e comunicação entre computadores.
+
+servidor = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+AF_INET: Define que o servidor usará o protocolo de endereçamento IPv4.
+
+SOCK_DGRAM: Especifica o uso de datagramas (UDP), que é um protocolo sem conexão garantida (diferente do SOCK_STREAM usado no TCP).
+
+servidor.bind(("localhost", 5000))
+
+Associa (vincula) o servidor ao endereço local (localhost ou 127.0.0.1) e à porta 5000. É através dessa porta que o servidor receberá as mensagens.
+
+print("Servidor UDP aguardando mensagem...")
+
+Apenas exibe um aviso no terminal informando que o programa está rodando e pronto para receber dados.
+
+dados, endereco = servidor.recvfrom(1024)
+
+O código trava nesta linha esperando até que algum cliente envie algo.
+
+127.0.0.1 / 1024: Define o tamanho máximo do buffer (lê até 1024 bytes de uma vez).
+
+Retorna duas informações:
+
+dados: Os bytes brutos recebidos do cliente.
+
+endereco: O IP e a porta de origem do cliente que enviou a mensagem (ex: ('127.0.0.1', 54321)).
+
+mensagem = dados.decode()
+
+Converte os dados brutos recebidos em bytes (ex: b'Ola') para uma string legível em texto formatado em UTF-8.
+
+print(...)
+
+Exibe no terminal quem enviou a mensagem (endereço/porta) e o conteúdo da mensagem recebida.
+
+resposta = "Mensagem recebida pelo servidor UDP!"
+
+Cria a frase de resposta que será enviada de volta ao cliente.
+
+servidor.sendto(resposta.encode(), endereco)
+
+resposta.encode(): Converte a string de texto de volta para bytes (necessário para trafegar na rede).
+
+endereco: Envia o pacote UDP diretamente para o endereço e porta do cliente capturados anteriormente.
+
+servidor.close()
+
+Libera a porta 5000 e fecha a conexão do socket.
+
+
+
+Este código em Python implementa o lado Cliente de uma aplicação de rede usando o protocolo UDP. Ele se conecta e troca dados com aquele servidor que você criou anteriormente.
+
+Passo a Passo do Código
+import socket
+
+Importa a biblioteca padrão do Python para gerenciamento de rede.
+
+cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+Cria o ponto de conexão (socket) do cliente.
+
+AF_INET: Define o protocolo IPv4.
+
+SOCK_DGRAM: Define o protocolo UDP (baseado em datagramas sem conexão fixa).
+
+mensagem = input("Digite sua mensagem: ")
+
+Pausa o programa e espera você digitar um texto no terminal (ex: "Olá, servidor!").
+
+cliente.sendto(mensagem.encode(), ("localhost", 5000))
+
+mensagem.encode(): Converte o texto digitado em bytes para poder trafegar pela rede.
+
+("localhost", 5000): Envia o pacote de dados diretamente para o IP local (127.0.0.1) na porta 5000 (onde o seu servidor UDP está escutando).
+
+dados, endereco = cliente.recvfrom(1024)
+
+O cliente trava nesta linha aguardando a resposta do servidor.
+
+Quando o servidor responde, a variável dados recebe a mensagem em bytes e endereco guarda a origem do servidor. O limite de leitura é de 1024 bytes.
+
+print("Resposta do servidor:") / print(dados.decode())
+
+dados.decode(): Decodifica os bytes recebidos de volta para texto legível.
+
+Imprime no terminal a mensagem enviada pelo servidor (ex: "Mensagem recebida pelo servidor UDP!").
+
+cliente.close()
+
+Fecha o socket do cliente e libera os recursos do sistema.
